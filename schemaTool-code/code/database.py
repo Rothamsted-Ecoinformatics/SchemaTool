@@ -7,14 +7,22 @@ import sys
 import pyodbc
 import json
 import configparser
+import settings
 
 
 class DocumentInfo:
     
     def __init__(self):
+        """
+tract 
+        """
         self.url = None
         self.mdId = None
         self.data = None
+        self.folder = None
+        self.sDOI = None
+
+        
         
         
 class Person:
@@ -90,8 +98,7 @@ def getCursor():
     return cur
 
 def getDocumentMetadata(mdId):
-    cur = getCursor()
-    cur.execute("""select m.md_id, m.url, m.identifier, m.identifier_type, m.title, p.organisation_name as publisher, publication_year, grt.type_value as grt_value, srt.type_value as srt_value,
+    """ sql select m.md_id, m.url, m.identifier, m.identifier_type, m.title, p.organisation_name as publisher, publication_year, grt.type_value as grt_value, srt.type_value as srt_value,
         m.language, m.version, f.mime_type, f.extension, m.rights_text, m.rights_licence_uri, m.rights_licence, m.description_abstract,m.description_methods,m.description_toc,m.description_technical_info,m.description_quality,m.description_provenance,m.description_other,
         fl.fieldname, fl.geo_point_latitude, fl.geo_point_longitude
         from (((((metadata_document m
@@ -100,10 +107,15 @@ def getDocumentMetadata(mdId):
         left outer join specific_resource_types srt on m.srt_id = srt.srt_id)
         inner join formats f on m.format_id = f.format_id)
         inner join experiment lte on m.lte_id = lte.experiment_id)
-        inner join fields fl on lte.field_id = fl.field_id
-        where m.md_id = ?""", mdId)
+        inner join fields fl on lte.field_id = fl.field_id encapsulted in a view
+    
+    
+    """
+    cur = getCursor()
+    cur.execute("""select * from viewMetaDocument  where md_id = ?""", mdId)
     return cur
 
+    
 def prepareCreators(mdId):
     cur = getCursor()
     creators = []
@@ -256,8 +268,17 @@ def process(documentInfo):
     print("Document ID is: " + mdId)
     if mdRow:
         mdUrl = mdRow.url
-        documentInfo.url = mdUrl
+        documentInfo.url = mdUrl        
         print(documentInfo.url)
+        mdExpt =  mdRow.experiment_code
+        documentInfo.expt = mdExpt
+        print(documentInfo.expt)
+        folder = ''.join(ch for ch in mdExpt if ch.isalnum()).lower()
+        documentInfo.folder = folder
+        print(folder)
+        sDOI = mdRow.identifier[9::]
+        documentInfo.sDOI = sDOI
+        print(sDOI)
         data = {
             'identifier' : {
                 'identifier' : mdRow.identifier,
@@ -299,6 +320,8 @@ def process(documentInfo):
     documentInfo.data = data    
     return documentInfo    
 
+
+"""
 def logDoiMinted(documentInfo):
     try:
         con = connect()
@@ -309,14 +332,14 @@ def logDoiMinted(documentInfo):
         print(error)
     except pyodbc.Error as error:
         print(error)
-    
+"""    
 
 try:
     documentInfo = DocumentInfo()        
     documentInfo.mdId = input('Enter Document ID: ')
-    documentInfo = process(documentInfo)
-    
-    xname = "D:/doi_out/"+ str(documentInfo.mdId) + ".json"
+    documentInfo = process(documentInfo)    
+    xname = settings.STAGE+ "metadata/"+str(documentInfo.folder)+"/"+ str(documentInfo.sDOI) + ".json"
+    print (xname)
     fxname = open(xname,'w+')
     strJsDoc =  json.dumps(documentInfo.data, indent=4)
     print (strJsDoc)
@@ -327,6 +350,7 @@ try:
     #doi = documentInfo.data['identifier']['identifier']
     #d.doi_post(doi, documentInfo.url)
     #logDoiMinted(documentInfo)
+    print('json document saved in '+ xname)
     print('\n done')
 
 
