@@ -1,0 +1,131 @@
+{
+    "identifier": {
+        "identifier": "10.23637/EX4-sup-003-01",
+        "identifierType": "DOI"
+    },
+    "creators": [],
+    "titles": [
+        {
+            "title": "Exhaustion Land Experiment Plan, Phase I & II"
+        }
+    ],
+    "publisher": "The Electronic Rothamsted Archive, Rothamsted Research",
+    "publicationYear": 2016,
+    "resourceType": {
+        "resourceTypeGeneral": "Text"
+    },
+    "subjects": [
+        {
+            "lang": "en",
+            "subjectScheme": "WIKIDATA",
+            "schemeURI": "https://www.wikidata.org/entity/",
+            "valueURI": "Q41522609",
+            "subject": "Hoosfield spring barley long-term experiment"
+        },
+        {
+            "lang": "en",
+            "subjectScheme": "AGROVOC",
+            "schemeURI": "http://aims.fao.org/aos/agrovoc",
+            "valueURI": "c_7441",
+            "subject": "straw"
+        },
+        {
+            "lang": "en",
+            "subjectScheme": "AGROVOC",
+            "schemeURI": "http://aims.fao.org/aos/agrovoc",
+            "valueURI": "c_33949",
+            "subject": "species diversity"
+        },
+        {
+            "lang": "en",
+            "subjectScheme": "AGROVOC",
+            "schemeURI": "http://aims.fao.org/aos/agrovoc",
+            "valueURI": "c_1666",
+            "subject": "climate change"
+        },
+        {
+            "lang": "en",
+            "subjectScheme": "GACS",
+            "schemeURI": "http://id.agrisemantics.org/gacs/",
+            "valueURI": "C4683",
+            "subject": "soil organic carbon"
+        },
+        {
+            "lang": "en",
+            "subjectScheme": "AGROVOC",
+            "schemeURI": "http://aims.fao.org/aos/agrovoc",
+            "valueURI": "c_7156",
+            "subject": "soil"
+        },
+        {
+            "lang": "en",
+            "subjectScheme": "AGROVOC",
+            "schemeURI": "http://aims.fao.org/aos/agrovoc",
+            "valueURI": "c_24408",
+            "subject": "residual effects"
+        },
+        {
+            "lang": "en",
+            "subjectScheme": "AGROVOC",
+            "schemeURI": "http://aims.fao.org/aos/agrovoc",
+            "valueURI": "c_1971",
+            "subject": "cropping system"
+        }
+    ],
+    "contributors": [],
+    "dates": [],
+    "language": "en",
+    "version": "1",
+    "relatedIdentifiers": [],
+    "sizes": [
+        "2 pages",
+        "281 KB"
+    ],
+    "formats": [
+        "application/pdf"
+    ],
+    "rightsList": [
+        {
+            "rightsURI": "http://creativecommons.org/licenses/by/4.0",
+            "rights": "This work is licensed under the terms of the Creative Commons Attribution 4.0 International License"
+        },
+        {
+            "rights": "Copyright Rothamsted Research"
+        }
+    ],
+    "descriptions": [
+        {
+            "lang": "en",
+            "descriptionType": "Abstract",
+            "description": "Plan of the Exhaustion Land Experiment illustrating plots and their treatments for Phase I (1856-1901) and Phase II (1902-1939) of the long-term experiment."
+        },
+        {
+            "lang": "en",
+            "descriptionType": "Other",
+            "description": "Information is compiled from the \"Details of the Classical and Long-Term Experiments up to 1967\" and \"Guide to the Classical Field Experiments\" (see related documents) None None"
+        }
+    ],
+    "geoLocations": [
+        {
+            "geoLocationPoint": {
+                "pointLongitude": -0.37608,
+                "pointLatitude": 51.81206
+            },
+            "geoLocationPlace": "Hoosfield"
+        }
+    ],
+    "fundingReferences": [
+        {
+            "funderName": "Biotechnology and Biological Sciences Research Council",
+            "funderIdentifier": {
+                "funderIdentifier": "http://dx.doi.org/10.13039/501100000268",
+                "funderIdentifierType": "Crossref Funder ID"
+            },
+            "awardNumber": {
+                "awardNumber": "BBS/E/C/00005189",
+                "awardURI": "https://gtr.ukri.org/projects?ref=BBS%2FE%2FC%2F00005189"
+            },
+            "awardTitle": "The Rothamsted Long-Term Experiments including Sample Archive and e-RA database"
+        }
+    ]
+}

@@ -68,7 +68,7 @@ class Person:
         return address
 #        
     def asCreatorJson(self):
-        creator = dict(creatorName = self.fullname,givenName = self.givenName,familyName = self.familyName)
+        creator = dict(type = 'Person', creatorName = self.fullname,givenName = self.givenName,familyName = self.familyName)
         if not self.nameIdentifiers is None:                
             creator["nameIdentifiers"] = self.nameIdentifiers
         creator["affiliations"] = self.affiliations
@@ -124,13 +124,15 @@ def prepareCreators(mdId):
     
     results = cur.fetchall()    
     for row in results: 
-        person = Person(row)        
+        person = Person(row)  
+     
         creators.append(person.asCreatorJson())
            
     # second prepare organisations
-    cur.execute('select organisation_name from organisation o inner join organisation_creator oc on o.organisation_id = oc.organisation_id where oc.md_id = ?',mdId)
+    cur.execute('select * from organisation o inner join organisation_creator oc on o.organisation_id = oc.organisation_id where oc.md_id = ?',mdId)
     results = cur.fetchall()
     for row in results:
+     
         creators.append({"creatorName": row.organisation_name}) 
         
     return creators
@@ -158,7 +160,7 @@ def prepareContributors(mdId):
         where r.md_id = ?""",mdId)
     results = cur.fetchall()
     for row in results:
-        contributors.append({"contributorName": row.organisation_name}) 
+        contributors.append({"sourceOrganisation": row.organisation_name}) 
         
     return contributors    
     
@@ -170,7 +172,6 @@ def prepareSubjects(mdId):
         inner join subject_schemas ss on s.ss_id = ss.ss_id)
         inner join document_subjects ds on s.subject_id = ds.subject_id 
         where ds.md_id = ?""", mdId)
-    1535448515
     results = cur.fetchall()    
     for row in results: 
         subjects.append({'lang' : 'en', 'subjectScheme' : row.subject_schema, 'schemeURI' : row.schema_uri, 'valueURI' : row.subject_uri, 'subject' : row.subject})
@@ -280,21 +281,20 @@ def process(documentInfo):
         documentInfo.sDOI = sDOI
         print(sDOI)
         data = {
-            'identifier' : {
-                'identifier' : mdRow.identifier,
-                'identifierType' : 'DOI'
-            },
+            '@context' : 'https://schema.org/',
+            '@type' : mdRow.grt_value,           
+            'identifier' : mdRow.identifier,
+            'url': mdRow.url,
             'creators' : prepareCreators(mdId),
-            'titles' : [
-                {'title' : mdRow.title}
-            ],
+            'name' : mdRow.title,
+            'description': mdRow.description_abstract,
             'publisher' : mdRow.publisher,
-            'publicationYear' : mdRow.publication_year,
+            'datePublished' : mdRow.publication_year,
             'resourceType': {'resourceTypeGeneral' : mdRow.grt_value},
             'subjects' : prepareSubjects(mdId),
             'contributors' : prepareContributors(mdId),
             'dates' : prepareDates(mdId),
-            'language' : mdRow.language,        
+            'inLanguage' : mdRow.language,        
             'version' : str(mdRow.version),
             'relatedIdentifiers' : prepareRelatedIdentifiers(mdId),
             'sizes' : prepareSizes(mdId),
@@ -335,9 +335,12 @@ def logDoiMinted(documentInfo):
 """    
 
 try:
+    #-28178770 is a dataset
+    # 4 is a text 
     documentInfo = DocumentInfo()        
     documentInfo.mdId = input('Enter Document ID: ')
     documentInfo = process(documentInfo)    
+    
     xname = settings.STAGE+ "metadata/"+str(documentInfo.folder)+"/"+ str(documentInfo.sDOI) + ".json"
     print (xname)
     fxname = open(xname,'w+')
