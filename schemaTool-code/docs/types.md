@@ -20,6 +20,29 @@
   - **PostalAddress**
   
   
+     "creator": [
+        {
+            "type": "Person",
+            "name": "Margaret Glendining",
+            "givenName": "Margaret",
+            "familyName": "Glendining",
+            "sameAs": "https://orcid.org/0000-0002-6466-4629",
+            "address": {
+            "@type": "PostalAddress",
+        	"streetAddress": "1400 VFW Parkway",
+       	 	"addressLocality": "West Roxbury",
+       	 	"addressRegion": "MA",
+        	"postalCode": "02132",
+        	"addressCountry": "GBR"
+            }
+        },
+        {
+           "@type": "Organization",
+        	"sameAs": "https://ror.org/0347fy350",
+        	"name": "Rothamsted Research"
+        }
+    ]
+ 
   
   "creator": [
     {
