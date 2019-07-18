@@ -68,7 +68,7 @@ class Person:
         return address
 #        
     def asCreatorJson(self):
-        creator = dict(type = 'Person', creatorName = self.fullname,givenName = self.givenName,familyName = self.familyName)
+        creator = dict(type = 'Person', creatorName = self.fullname,givenName = self.givenName,familyName = self.familyName, sameAs = self.nameIdentifier)
         if not self.nameIdentifiers is None:                
             creator["nameIdentifiers"] = self.nameIdentifiers
         creator["affiliations"] = self.affiliations
@@ -336,6 +336,7 @@ def logDoiMinted(documentInfo):
 
 try:
     #-28178770 is a dataset
+    #-1140916605 has author
     # 4 is a text 
     documentInfo = DocumentInfo()        
     documentInfo.mdId = input('Enter Document ID: ')
