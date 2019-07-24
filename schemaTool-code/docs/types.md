@@ -1,4 +1,7 @@
-# Defining types 
+# Defining types
+The file passed-1140916605.json has been made by correcting manually the errors. It is a start of what we could aim at. 
+
+
 ## Person
 
 ### A person can be a type of the following
@@ -7,7 +10,7 @@
   - **copyrightHolder**: The party holding the legal copyright to the CreativeWorkc
   - **creator**: The creator/author of this CreativeWork. This is the same as the Author property for CreativeWork.
   - **editor**: Specifies the Person who edited the CreativeWork.
-  - **funder**: A person or organization that supports (sponsors) something through some kind of financial contribution.
+  - **funder**: A person or organisation that supports (sponsors) something through some kind of financial contribution.
   - **sdPublisher**: Indicates the party responsible for generating and publishing the current structured data markup, typically in cases where the structured data is derived automatically from existing published content but published on a different site. For example, student projects and open data initiatives often re-publish existing content with more explicitly structured metadata. 
   
 ### A person will have the following attributes: 
@@ -28,12 +31,12 @@
             "familyName": "Glendining",
             "sameAs": "https://orcid.org/0000-0002-6466-4629",
             "address": {
-            "@type": "PostalAddress",
-        	"streetAddress": "1400 VFW Parkway",
-       	 	"addressLocality": "West Roxbury",
-       	 	"addressRegion": "MA",
-        	"postalCode": "02132",
-        	"addressCountry": "GBR"
+            		"@type": "PostalAddress",
+        			"streetAddress": "1400 VFW Parkway",
+       	 		"addressLocality": "West Roxbury",
+       	 		"addressRegion": "MA",
+        			"postalCode": "02132",
+        			"addressCountry": "GBR"
             }
         },
         {

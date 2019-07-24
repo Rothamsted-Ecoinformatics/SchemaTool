@@ -115,7 +115,27 @@ def getDocumentMetadata(mdId):
     cur.execute("""select * from viewMetaDocument  where md_id = ?""", mdId)
     return cur
 
+def prepareCreators_new(mdId):
+    cur = getCursor()
+    creators = ""
+    # First prepare named people
+    cur.execute('select p.family_name, p.given_name, p.name_identifier, p.name_identifier_scheme, p.scheme_uri, o.organisation_name, o.street_address, o.address_locality, o.address_region, o.address_country, o.postal_code from (person p inner join person_creator pc on p.person_id = pc.person_id) inner join organisation o on p.affiliation = o.organisation_id where pc.md_id = ?', mdId)
     
+    results = cur.fetchall()    
+    for row in results: 
+        person = Person(row)  
+     
+        creators.append(person.asCreatorJson())
+           
+    # second prepare organisations
+    cur.execute('select * from organisation o inner join organisation_creator oc on o.organisation_id = oc.organisation_id where oc.md_id = ?',mdId)
+    results = cur.fetchall()
+    for row in results:
+     
+        creators.append({"creatorName": row.organisation_name}) 
+        
+    return creators 
+   
 def prepareCreators(mdId):
     cur = getCursor()
     creators = []
@@ -174,22 +194,22 @@ def prepareSubjects(mdId):
         where ds.md_id = ?""", mdId)
     results = cur.fetchall()    
     for row in results: 
-        subjects.append({'lang' : 'en', 'subjectScheme' : row.subject_schema, 'schemeURI' : row.schema_uri, 'valueURI' : row.subject_uri, 'subject' : row.subject})
+        subjects.append({'inLanguage' : 'en', 'subjectScheme' : row.subject_schema, 'schemeURI' : row.schema_uri, 'valueURI' : row.subject_uri, 'subject' : row.subject})
         
     return subjects
     
 def prepareDescriptions(row):
     descriptions = []
     
-    descriptions.append({'lang' : row.language, 'descriptionType' : 'Abstract', 'description' : row.description_abstract})
+    descriptions.append({'inLanguage' : row.language, 'descriptionType' : 'Abstract', 'description' : row.description_abstract})
     if not row.description_methods is None:
-        descriptions.append({'lang' : row.language, 'descriptionType' : 'Methods', 'description' : row.description_methods})
+        descriptions.append({'inLanguage' : row.language, 'descriptionType' : 'Methods', 'description' : row.description_methods})
     if not row.description_toc is None:
-        descriptions.append({'lang' : row.language, 'descriptionType' : 'TableOfContents', 'description' : row.description_toc})
+        descriptions.append({'inLanguage' : row.language, 'descriptionType' : 'TableOfContents', 'description' : row.description_toc})
     if not row.description_technical_info is None:
-        descriptions.append({'lang' : row.language, 'descriptionType' : 'TechnicalInfo', 'description' : row.description_technical_info})
+        descriptions.append({'inLanguage' : row.language, 'descriptionType' : 'TechnicalInfo', 'description' : row.description_technical_info})
     if not row.description_quality is None or not row.description_provenance is None or not row.description_other is None:
-        descriptions.append({'lang' : row.language, 'descriptionType' : 'Other', 'description' : str(row.description_provenance) + " " + str(row.description_quality) + " " + str(row.description_other)})
+        descriptions.append({'inLanguage' : row.language, 'descriptionType' : 'Other', 'description' : str(row.description_provenance) + " " + str(row.description_quality) + " " + str(row.description_other)})
     
     return descriptions
 
@@ -285,7 +305,7 @@ def process(documentInfo):
             '@type' : mdRow.grt_value,           
             'identifier' : mdRow.identifier,
             'url': mdRow.url,
-            'creators' : prepareCreators(mdId),
+            'creator' : prepareCreators(mdId),
             'name' : mdRow.title,
             'description': mdRow.description_abstract,
             'publisher' : mdRow.publisher,
@@ -320,19 +340,7 @@ def process(documentInfo):
     documentInfo.data = data    
     return documentInfo    
 
-
-"""
-def logDoiMinted(documentInfo):
-    try:
-        con = connect()
-        cur = con.cursor()
-        cur.execute("update metadata_document set doi_created = getdate() where md_id = ?", documentInfo.mdId)
-        con.commit()
-    except AttributeError as error:
-        print(error)
-    except pyodbc.Error as error:
-        print(error)
-"""    
+  
 
 try:
     #-28178770 is a dataset
