@@ -1,0 +1,103 @@
+.TH "code.prep" 3 "Thu Jul 25 2019" "Version 0.1" "schemaTool" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+code.prep
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBExpt\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fBconnect\fP ()"
+.br
+.ti -1c
+.RI "def \fBgetCursor\fP ()"
+.br
+.ti -1c
+.RI "def \fBgetExperiments\fP ()"
+.br
+.ti -1c
+.RI "def \fBmakeJSON\fP (results)"
+.br
+.ti -1c
+.RI "def \fBmakedirectories\fP (results)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "def \fBresults\fP = \fBgetExperiments\fP()"
+.br
+.ti -1c
+.RI "def \fBexpts\fP = makeJSON(results)"
+.br
+.ti -1c
+.RI "\fBstrJsonExpts\fP = json\&.dumps(expts, indent=4)"
+.br
+.ti -1c
+.RI "def \fBdirs\fP = makedirectories(results)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+.nf
+@package prep.py
+Created on 11 June 2019
+
+@author: castells
+@description: Prepare the staging area. 
+
+Define your staging main folder in settings.py 
+When this is ran, it prepares a staging area with all the folders for each experiment. 
+It also prepares the experiments.json file and places it in the default directory.
+
+When it is ran again, only newly created experiment folders are added. 
+Folders are not removed. 
+
+If a new structure is needed, we may want to rebuild a  new staging area and rerun the programs
+
+The staging area is a metadata folder with a folder per experiment.
+
+This uses the mssql database to make the relevant folders. A json string is not generated. 
+
+.fi
+.PP
+ 
+.SH "Function Documentation"
+.PP 
+.SS "def code\&.prep\&.getCursor ()"
+
+.PP
+.nf
+Returns a new Cursor object using the connection
+.fi
+.PP
+ 
+.SS "def code\&.prep\&.getExperiments ()"
+
+.PP
+.nf
+This gets the experiments. We only need experiments and farms
+
+SELECT Experiments.[Expt-Code], Experiments.Experiment, Experiments.KeyRefCode, Experiments.type, Experiments.[exp-ID]
+FROM Experiments
+WHERE ((Not (Experiments.type)="Other"))
+ORDER BY Experiments.Experiment;
+.fi
+.PP
+ 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for schemaTool from the source code\&.

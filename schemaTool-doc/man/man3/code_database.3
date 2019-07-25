@@ -1,4 +1,4 @@
-.TH "code.database" 3 "Wed Jul 10 2019" "Version 0.1" "schemaTool" \" -*- nroff -*-
+.TH "code.database" 3 "Thu Jul 25 2019" "Version 0.1" "schemaTool" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -29,6 +29,9 @@ code.database
 .RI "def \fBgetDocumentMetadata\fP (mdId)"
 .br
 .ti -1c
+.RI "def \fBprepareCreators_new\fP (mdId)"
+.br
+.ti -1c
 .RI "def \fBprepareCreators\fP (mdId)"
 .br
 .ti -1c
@@ -55,9 +58,6 @@ code.database
 .ti -1c
 .RI "def \fBprocess\fP (documentInfo)"
 .br
-.ti -1c
-.RI "def \fBlogDoiMinted\fP (documentInfo)"
-.br
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -68,6 +68,25 @@ Created on 9 Aug 2018
 
 @author: ostlerr
 
+.fi
+.PP
+ 
+.SH "Function Documentation"
+.PP 
+.SS "def code\&.database\&.getDocumentMetadata ( mdId)"
+
+.PP
+.nf
+sql select m.md_id, m.url, m.identifier, m.identifier_type, m.title, p.organisation_name as publisher, publication_year, grt.type_value as grt_value, srt.type_value as srt_value,
+    m.language, m.version, f.mime_type, f.extension, m.rights_text, m.rights_licence_uri, m.rights_licence, m.description_abstract,m.description_methods,m.description_toc,m.description_technical_info,m.description_quality,m.description_provenance,m.description_other,
+    fl.fieldname, fl.geo_point_latitude, fl.geo_point_longitude
+    from (((((metadata_document m
+    inner join organisation p on m.publisher = p.organisation_id)
+    inner join general_resource_types grt on m.grt_id = grt.grt_id)
+    left outer join specific_resource_types srt on m.srt_id = srt.srt_id)
+    inner join formats f on m.format_id = f.format_id)
+    inner join experiment lte on m.lte_id = lte.experiment_id)
+    inner join fields fl on lte.field_id = fl.field_id encapsulted in a view
 .fi
 .PP
  

@@ -1,0 +1,50 @@
+.TH "code.prep.Expt" 3 "Thu Jul 25 2019" "Version 0.1" "schemaTool" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+code.prep.Expt
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fB__init__\fP (self, row)"
+.br
+.ti -1c
+.RI "def \fBasExptJson\fP (self)"
+.br
+.ti -1c
+.RI "def \fBmkExptDir\fP (self)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBExperiment\fP"
+.br
+.ti -1c
+.RI "\fBexptID\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+.nf
+The class that will define an experiment and we can use that to make the folder. The row is the result of a query in the table
+
+SELECT Experiments.[ExptCode], Experiments.Experiment, Experiments.KeyRefCode, Experiments.type, Experiments.[exp-ID]
+FROM Experiments
+WHERE ((Not (Experiments.type)="Other"))
+ORDER BY Experiments.Experiment;
+
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for schemaTool from the source code\&.

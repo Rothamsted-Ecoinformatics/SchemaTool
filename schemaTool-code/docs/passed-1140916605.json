@@ -28,7 +28,8 @@
 		"name": "Margaret Glendining",
 		"givenName": "Margaret",
 		"familyName": "Glendining",
-		"sameAs": "https://orcid.org/0000-0002-6466-4629",
+		"identifier": "https://orcid.org/0000-0002-6466-4629",
+		"sameAs": "https://www.rothamsted.ac.uk/our-people/margaret-glendining",
 		"address": {
 			"@type": "PostalAddress",
 			"streetAddress": "Rothamsted Research",
@@ -41,7 +42,7 @@
 			"type": "ContactPoint",
 			"email": "era@rothamsted.ac.uk",
 			"contactType": "technical support",
-			"url": "http://www.era.rothamsted.ac.uk"
+			"url": "<root>/contact.php"
 		},
 		"affiliation": {
 			"@type": "organization",

@@ -194,7 +194,7 @@ def prepareSubjects(mdId):
         where ds.md_id = ?""", mdId)
     results = cur.fetchall()    
     for row in results: 
-        subjects.append({'inLanguage' : 'en', 'subjectScheme' : row.subject_schema, 'schemeURI' : row.schema_uri, 'valueURI' : row.subject_uri, 'subject' : row.subject})
+        subjects.append(row.subject)
         
     return subjects
     
@@ -304,36 +304,34 @@ def process(documentInfo):
             '@context' : 'https://schema.org/',
             '@type' : mdRow.grt_value,           
             'identifier' : mdRow.identifier,
-            'url': mdRow.url,
-            'creator' : prepareCreators(mdId),
             'name' : mdRow.title,
+            'url': mdRow.url,
             'description': mdRow.description_abstract,
-            'publisher' : mdRow.publisher,
+            'publisher' : 'mdRow.publisher - TODO',
             'datePublished' : mdRow.publication_year,
-            'resourceType': {'resourceTypeGeneral' : mdRow.grt_value},
-            'subjects' : prepareSubjects(mdId),
-            'contributors' : prepareContributors(mdId),
-            'dates' : prepareDates(mdId),
-            'inLanguage' : mdRow.language,        
-            'version' : str(mdRow.version),
-            'relatedIdentifiers' : prepareRelatedIdentifiers(mdId),
-            'sizes' : prepareSizes(mdId),
-            'formats' : [mdRow.mime_type],
-            'rightsList' : [
-                {'rightsURI' : mdRow.rights_licence_uri, 'rights' : mdRow.rights_licence},
-                {'rights' : mdRow.rights_text}
-            ],
-            'descriptions' : prepareDescriptions(mdRow),
-            'geoLocations': [
+            'dateCreated' : 'prepareDates(mdId) - TODO',
+            'inLanguage' : mdRow.language,  
+            'version' : str(mdRow.version), 
+            'keywords' : prepareSubjects(mdId),
+            'creator' : 'prepareCreators(mdId) - TODO',
+            'contributor' : 'prepareContributors(mdId) - TODO',
+            'encodingFormat' : mdRow.mime_type,
+            'copyrightHolder' : {
+                "type": "organization",
+                "name": "Rothamsted Research - TODO"
+                },
+            'license':  mdRow.rights_licence,
+            'spatialCoverage': 
                 {
-                    'geoLocationPoint' : {
-                        'pointLongitude': float(mdRow.geo_point_longitude),
-                        'pointLatitude': float(mdRow.geo_point_latitude)
+                    'type': 'place',
+                    'geo' : {
+                        'type':'GeoCoordinates',
+                        'longitude': float(mdRow.geo_point_longitude),
+                        'latitude': float(mdRow.geo_point_latitude)
                     },
-                    'geoLocationPlace': mdRow.fieldname            
-                }
-            ],
-            'fundingReferences' : prepareFundingReferences(mdId)
+                    'name': mdRow.fieldname            
+                },
+            'funder' : 'prepareFundingReferences(mdId) - TODO'
         }
         print(data)
         

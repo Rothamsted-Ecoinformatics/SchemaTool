@@ -111,9 +111,11 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>connect</b> ()</td></t
 <tr class="memitem:ab4259b789cbfa99ff8ad8c639cc40c08"><td class="memItemLeft" align="right" valign="top"><a id="ab4259b789cbfa99ff8ad8c639cc40c08"></a>
 def&#160;</td><td class="memItemRight" valign="bottom"><b>getCursor</b> ()</td></tr>
 <tr class="separator:ab4259b789cbfa99ff8ad8c639cc40c08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75e6ce46bed87c23f0af13953670ddfd"><td class="memItemLeft" align="right" valign="top"><a id="a75e6ce46bed87c23f0af13953670ddfd"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>getDocumentMetadata</b> (mdId)</td></tr>
+<tr class="memitem:a75e6ce46bed87c23f0af13953670ddfd"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecode_1_1database.html#a75e6ce46bed87c23f0af13953670ddfd">getDocumentMetadata</a> (mdId)</td></tr>
 <tr class="separator:a75e6ce46bed87c23f0af13953670ddfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16d26bc18e55a84a5e9eddd9f99830b2"><td class="memItemLeft" align="right" valign="top"><a id="a16d26bc18e55a84a5e9eddd9f99830b2"></a>
+def&#160;</td><td class="memItemRight" valign="bottom"><b>prepareCreators_new</b> (mdId)</td></tr>
+<tr class="separator:a16d26bc18e55a84a5e9eddd9f99830b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74ccd5d48042e2f6c60fb7ab52fd65b0"><td class="memItemLeft" align="right" valign="top"><a id="a74ccd5d48042e2f6c60fb7ab52fd65b0"></a>
 def&#160;</td><td class="memItemRight" valign="bottom"><b>prepareCreators</b> (mdId)</td></tr>
 <tr class="separator:a74ccd5d48042e2f6c60fb7ab52fd65b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,15 +143,40 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>prepareFundingReferenc
 <tr class="memitem:a38198f71f5e827306b51b5488a470072"><td class="memItemLeft" align="right" valign="top"><a id="a38198f71f5e827306b51b5488a470072"></a>
 def&#160;</td><td class="memItemRight" valign="bottom"><b>process</b> (documentInfo)</td></tr>
 <tr class="separator:a38198f71f5e827306b51b5488a470072"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7e84659093f42563a3e1f65a2a918f6"><td class="memItemLeft" align="right" valign="top"><a id="ab7e84659093f42563a3e1f65a2a918f6"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>logDoiMinted</b> (documentInfo)</td></tr>
-<tr class="separator:ab7e84659093f42563a3e1f65a2a918f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><pre class="fragment">Created on 9 Aug 2018
 
 @author: ostlerr
-</pre> </div></div><!-- contents -->
+</pre> </div><h2 class="groupheader">Function Documentation</h2>
+<a id="a75e6ce46bed87c23f0af13953670ddfd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75e6ce46bed87c23f0af13953670ddfd">&#9670;&nbsp;</a></span>getDocumentMetadata()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def code.database.getDocumentMetadata </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>mdId</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<pre class="fragment">sql select m.md_id, m.url, m.identifier, m.identifier_type, m.title, p.organisation_name as publisher, publication_year, grt.type_value as grt_value, srt.type_value as srt_value,
+    m.language, m.version, f.mime_type, f.extension, m.rights_text, m.rights_licence_uri, m.rights_licence, m.description_abstract,m.description_methods,m.description_toc,m.description_technical_info,m.description_quality,m.description_provenance,m.description_other,
+    fl.fieldname, fl.geo_point_latitude, fl.geo_point_longitude
+    from (((((metadata_document m
+    inner join organisation p on m.publisher = p.organisation_id)
+    inner join general_resource_types grt on m.grt_id = grt.grt_id)
+    left outer join specific_resource_types srt on m.srt_id = srt.srt_id)
+    inner join formats f on m.format_id = f.format_id)
+    inner join experiment lte on m.lte_id = lte.experiment_id)
+    inner join fields fl on lte.field_id = fl.field_id encapsulted in a view</pre> 
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

@@ -24,12 +24,22 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "schemaTool", "index.html", [
+    [ "Markdown Cheat Sheet", "md__d_1_code_python_workspace_schema_tool2_schema_tool-code_docs_md.html", null ],
+    [ "Defining types and classes", "md__d_1_code_python_workspace_schema_tool2_schema_tool-code_docs_types.html", null ],
     [ "Namespaces", "namespaces.html", [
-      [ "Namespace List", "namespaces.html", "namespaces_dup" ]
+      [ "Namespace List", "namespaces.html", "namespaces_dup" ],
+      [ "Namespace Members", "namespacemembers.html", [
+        [ "All", "namespacemembers.html", null ],
+        [ "Functions", "namespacemembers_func.html", null ]
+      ] ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
-      [ "Class Index", "classes.html", null ]
+      [ "Class Index", "classes.html", null ],
+      [ "Class Members", "functions.html", [
+        [ "All", "functions.html", null ],
+        [ "Functions", "functions_func.html", null ]
+      ] ]
     ] ]
   ] ]
 ];

@@ -1,0 +1,83 @@
+.TH "md__d_1_code_python_workspace_schema_tool2_schema_tool-code_docs_types" 3 "Thu Jul 25 2019" "Version 0.1" "schemaTool" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+md__d_1_code_python_workspace_schema_tool2_schema_tool-code_docs_types \- Defining types and classes 
+The file passed-1140916605\&.json has been made by correcting manually the errors\&. It is a start of what we could aim at\&. 
+.SS "dataset itself"
+.PP
+.IP "\(bu" 2
+** **:
+.IP "\(bu" 2
+\fBdistribution\fP: A downloadable form of this dataset, at a specific location, in a specific format\&. expected type: DataDownload
+.IP "\(bu" 2
+\fBcontactPoint\fP: (type contactpoint) or \fBemail\fP: I note that contact point will need a URL, or a telephone number\&.
+.PP
+.PP
+.SS "Person"
+.PP
+.SS "A person can be a type of the following"
+.PP
+.IP "\(bu" 2
+\fBauthor\fP: The author of this content or rating
+.IP "\(bu" 2
+\fBcontributor\fP : A secondary contributor to the CreativeWork: and in contact point type we can put curator\&.
+.IP "\(bu" 2
+\fBcopyrightHolder\fP: The party holding the legal copyright to the CreativeWorkc
+.IP "\(bu" 2
+\fBcreator\fP: The creator/author of this CreativeWork\&. This is the same as the Author property for CreativeWork\&.
+.IP "\(bu" 2
+\fBeditor\fP: Specifies the Person who edited the CreativeWork\&. Could this be the curator?
+.IP "\(bu" 2
+\fBfunder\fP: A person or organisation that supports (sponsors) something through some kind of financial contribution\&.
+.IP "\(bu" 2
+\fBsdPublisher\fP: Indicates the party responsible for generating and publishing the current structured data markup, typically in cases where the structured data is derived automatically from existing published content but published on a different site\&. For example, student projects and open data initiatives often re-publish existing content with more explicitly structured metadata\&.
+.PP
+.PP
+.SS "A person will have the following attributes:"
+.PP
+.IP "\(bu" 2
+\fBfamilyName\fP: Family name\&. In the U\&.S\&., the last name of an Person\&. This can be used along with givenName instead of the name property
+.IP "\(bu" 2
+\fBgivenName\fP: Given name\&. In the U\&.S\&., the first name of a Person\&. This can be used along with familyName instead of the name property 
+.br
+ - \fBname\fP: First + last name: it fails if there is no name\&.
+.IP "\(bu" 2
+\fBsameAs\fP: (type URL) will have the URL to orcid ID
+.IP "\(bu" 2
+\fBaffiliation\fP: (type organization)
+.IP "\(bu" 2
+\fBaddress\fP : type PostalAddress
+.PP
+.PP
+.PP
+.nf
+"creator": {
+    "type": "Person",
+    "name": "Margaret Glendining",
+    "givenName": "Margaret",
+    "familyName": "Glendining",
+    "sameAs": "https://orcid\&.org/0000-0002-6466-4629",
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Rothamsted Research",
+        "addressLocality": "Harpenden",
+        "addressRegion": "Hertfordshire",
+        "postalCode": "AL5 2JQ",
+        "addressCountry": "GBR"
+    },
+    "contactPoint": {
+        "type": "ContactPoint",
+        "email": "era@rothamsted\&.ac\&.uk",
+        "contactType": "curator",
+        "url": "<root>/contact\&.php"
+    },
+    "affiliation": {
+        "@type": "organization",
+        "name": "Rothamsted Research",
+        "sameAs": "https://ror\&.org/0347fy350"
+    }
+}
+.fi
+.PP
+ 
