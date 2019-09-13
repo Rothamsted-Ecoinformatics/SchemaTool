@@ -50,11 +50,11 @@ class Person:
                     "schemeURI": self.schemeUri 
                 }
             ]
+        self.affiliation = dict(type="Organization", name= self.organisationName,  address= self.formatAddress())
         
-        self.affiliations = [self.formatAddress()]
         
     def formatAddress(self):
-        address = self.organisationName
+        address = ""
         if not self.street is None:
             address = address + ", " + self.street
         if not self.locality is None:
@@ -68,17 +68,17 @@ class Person:
         return address
 #        
     def asCreatorJson(self):
-        creator = dict(type = 'Person', creatorName = self.fullname,givenName = self.givenName,familyName = self.familyName, sameAs = self.nameIdentifier)
-        if not self.nameIdentifiers is None:                
-            creator["nameIdentifiers"] = self.nameIdentifiers
-        creator["affiliations"] = self.affiliations
+        dictaddress = dict(type="PostalAddress", streetAddress= self.organisationName, addressLocality= self.locality, addressRegion = self.region, postalCode= self.postalCode, addressCountry=self.country   )
+        creator = dict(type = 'Person', personName = self.fullname,givenName = self.givenName,familyName = self.familyName, sameAs = self.nameIdentifier,address = dictaddress )
+      
+        creator["affiliation"] = self.affiliations
         return creator
     
     def asContributorJson(self):
-        contributor = dict(contributorType = self.contributorType, contributorName = self.fullname, givenName = self.givenName, familyName = self.familyName)
-        if not self.nameIdentifiers is None:                
-            contributor["nameIdentifiers"] = self.nameIdentifiers
-        contributor["affiliations"] = self.affiliations
+        dictaddress = dict(type="PostalAddress", streetAddress= self.organisationName, addressLocality= self.locality, addressRegion = self.region, postalCode= self.postalCode, addressCountry=self.country   )
+        contributor = dict(type = 'Person', jobTitle = self.contributorType, name = self.fullname, givenName = self.givenName, familyName = self.familyName, sameAs = self.nameIdentifier, address = dictaddress)
+     
+        contributor["affiliation"] = self.affiliation
         return contributor
 
 def connect():
@@ -153,7 +153,7 @@ def prepareCreators(mdId):
     results = cur.fetchall()
     for row in results:
      
-        creators.append({"creatorName": row.organisation_name}) 
+        creators.append({"type": "organization", "name": row.organisation_name}) 
         
     return creators
 
@@ -307,20 +307,28 @@ def process(documentInfo):
             'name' : mdRow.title,
             'url': mdRow.url,
             'description': mdRow.description_abstract,
-            'publisher' : 'mdRow.publisher - TODO',
+            'publisher' :{
+                "type": "organization",
+                "name": mdRow.publisher
+                },
             'datePublished' : mdRow.publication_year,
             'dateCreated' : 'prepareDates(mdId) - TODO',
             'inLanguage' : mdRow.language,  
             'version' : str(mdRow.version), 
             'keywords' : prepareSubjects(mdId),
-            'creator' : 'prepareCreators(mdId) - TODO',
-            'contributor' : 'prepareContributors(mdId) - TODO',
+            'creator' : prepareCreators(mdId),
+            'contributor' : prepareContributors(mdId),
             'encodingFormat' : mdRow.mime_type,
             'copyrightHolder' : {
                 "type": "organization",
-                "name": "Rothamsted Research - TODO"
+                "name": mdRow.publisher
                 },
-            'license':  mdRow.rights_licence,
+            'license':  {
+                "type": "CreativeWork",
+                "name": "CC4",
+                "license": mdRow.rights_licence_uri,
+                "text": mdRow.rights_licence
+                },
             'spatialCoverage': 
                 {
                     'type': 'place',
@@ -355,11 +363,7 @@ try:
     print (strJsDoc)
     fxname.write(strJsDoc)
     fxname.close()
-    #d = getDataCiteClient()
-    #d.metadata_post(schema41.tostring(documentInfo.data))
-    #doi = documentInfo.data['identifier']['identifier']
-    #d.doi_post(doi, documentInfo.url)
-    #logDoiMinted(documentInfo)
+   
     print('json document saved in '+ xname)
     print('\n done')
 
