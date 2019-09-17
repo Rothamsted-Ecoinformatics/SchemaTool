@@ -213,17 +213,34 @@ def prepareDescriptions(row):
     
     return descriptions
 
-def prepareDates(mdId):
+def prepareDateCreated(mdId):
     cur = getCursor()
-    dates = []
     cur.execute("""select dt.type_value, dd.document_date from document_dates dd inner join date_types dt on dd.dt_id = dt.dt_id where dd.md_id = ?""", mdId)
     
     results = cur.fetchall()    
     for row in results: 
-        dates.append({'date': row.document_date.strftime('%Y-%m-%d'),'dateType' : row.type_value})
-        
-    return dates
+        if row.type_value == 'Created':
+            return row.document_date.strftime('%Y-%m-%d')  
+
+def prepareDateAvailable(mdId):
+    cur = getCursor()
+    cur.execute("""select dt.type_value, dd.document_date from document_dates dd inner join date_types dt on dd.dt_id = dt.dt_id where dd.md_id = ?""", mdId)
     
+    results = cur.fetchall()    
+    for row in results: 
+        if row.type_value in ('Available', 'Accepted') :
+            return row.document_date.strftime('%Y-%m-%d')  
+
+
+def prepareDateModified(mdId):
+    cur = getCursor()
+    cur.execute("""select dt.type_value, dd.document_date from document_dates dd inner join date_types dt on dd.dt_id = dt.dt_id where dd.md_id = ?""", mdId)
+    
+    results = cur.fetchall()    
+    for row in results: 
+        if row.type_value == 'Updated' :
+            return row.document_date.strftime('%Y-%m-%d')  
+
 def prepareRelatedIdentifiers(mdId):
     cur = getCursor()
     related_identifiers = []
@@ -312,7 +329,9 @@ def process(documentInfo):
                 "name": mdRow.publisher
                 },
             'datePublished' : mdRow.publication_year,
-            'dateCreated' : 'prepareDates(mdId) - TODO',
+            'dateCreated' : prepareDateCreated(mdId),
+            'dateModified' : prepareDateModified(mdId),
+            'datePublished' : prepareDateAvailable(mdId),
             'inLanguage' : mdRow.language,  
             'version' : str(mdRow.version), 
             'keywords' : prepareSubjects(mdId),
