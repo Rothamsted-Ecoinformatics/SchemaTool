@@ -69,9 +69,9 @@ class Person:
 #        
     def asCreatorJson(self):
         dictaddress = dict(type="PostalAddress", streetAddress= self.organisationName, addressLocality= self.locality, addressRegion = self.region, postalCode= self.postalCode, addressCountry=self.country   )
-        creator = dict(type = 'Person', personName = self.fullname,givenName = self.givenName,familyName = self.familyName, sameAs = self.nameIdentifier,address = dictaddress )
+        creator = dict(type = 'Person', Name = self.fullname,givenName = self.givenName,familyName = self.familyName, sameAs = self.nameIdentifier,address = dictaddress )
       
-        creator["affiliation"] = self.affiliations
+        creator["affiliation"] = self.affiliation
         return creator
     
     def asContributorJson(self):
@@ -283,18 +283,14 @@ def prepareFundingReferences(mdId):
     results = cur.fetchall()
     for row in results:
         fundingreferences.append(
-        {
-            "funderName": row.organisation_name,
-            "funderIdentifier": {
-                "funderIdentifier": row.funder_identifier,
-                "funderIdentifierType": row.funder_identifier_type
-            },
-            "awardNumber": {
-                "awardNumber": row.award_number,
-                "awardURI": row.award_uri
-            },
-            "awardTitle": row.award_title
-        })
+           {
+               "type": "organization",
+               "name": row.organisation_name,
+               "sameAs": row.funder_identifier,
+               "award":  row.award_number + ' - ' + row.award_title,
+               "identifier": row.award_uri
+            }
+        )
         
     return fundingreferences
 
@@ -358,7 +354,7 @@ def process(documentInfo):
                     },
                     'name': mdRow.fieldname            
                 },
-            'funder' : 'prepareFundingReferences(mdId) - TODO'
+            'funder' : prepareFundingReferences(mdId)
         }
         print(data)
         
@@ -389,5 +385,11 @@ try:
 
 except:
     print("Unexpected error:", sys.exc_info()[0])        
+    print(sys.exc_info()[0])
+    print(sys.exc_info()[1])
+    print(sys.exc_info()[2].tb_lineno)
+    print('Error: {}. {}, line: {}'.format(sys.exc_info()[0],
+                                         sys.exc_info()[1],
+                                         sys.exc_info()[2].tb_lineno))
     
 
