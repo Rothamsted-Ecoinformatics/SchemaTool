@@ -340,7 +340,7 @@ def process(documentInfo):
                 },
             'license':  {
                 "type": "CreativeWork",
-                "name": "CC4",
+                "name": "Attribution 4.0 International (CC BY 4.0)",
                 "license": mdRow.rights_licence_uri,
                 "text": mdRow.rights_licence
                 },
