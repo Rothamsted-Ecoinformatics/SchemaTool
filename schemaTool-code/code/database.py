@@ -2,6 +2,10 @@
 Created on 9 Aug 2018
 
 @author: ostlerr
+@author: castells
+
+This code lists the datasets in the database: you choose the one you want to process and it saves the Schema json in the relevant 
+folder prepared in your staging area. See settings to set the staging area. 
 '''
 import sys
 import pyodbc
@@ -361,16 +365,7 @@ def process(documentInfo):
     documentInfo.data = data    
     return documentInfo    
 
-  
-
-try:
-    #-28178770 is a dataset
-    #-1140916605 has author
-    # 4 is a text 
-    documentInfo = DocumentInfo()        
-    documentInfo.mdId = input('Enter Document ID: ')
-    documentInfo = process(documentInfo)    
-    
+def save(documentInfo): 
     xname = settings.STAGE+ "metadata/"+str(documentInfo.folder)+"/"+ str(documentInfo.sDOI) + ".json"
     print (xname)
     fxname = open(xname,'w+')
@@ -381,7 +376,86 @@ try:
    
     print('json document saved in '+ xname)
     print('\n done')
+    
+def getDOCIDs():
+    #list 
+    DOCIDs = []
+    cur = getCursor()
+    cur.execute("""select * from viewMetaDocument where grt_value like 'dataset' """)
+    results = cur.fetchall()  
+    counter = 0  
+    for row in results: 
+        
+        counter +=1  
+        DOCIDs.append(dict(
+            nb = counter,
+            documentID = row.md_id,
+            title = row.title,
+            expCode = row.experiment_code))
+           
+        
+    return DOCIDs 
 
+
+try:
+    #-28178770 is a dataset
+    #-1140916605 has author
+    # 4 is a text 
+
+    
+    while True:
+        datasetID = 0
+        documentInfo = DocumentInfo()   
+        DOCIDs = getDOCIDs()
+   
+        IDs = []     
+        tokens = []
+        counter = 0
+        for items in DOCIDs: 
+            counter = counter + 1
+            print ("%s -  %s (%s) DOCIDs =  %s" % (counter, items['title'],items['expCode'], items['documentID']))
+            IDs.append(str(items['documentID']))
+            tokens.append(str(counter))
+        print (" ")  
+        print(tokens)
+    
+        token = '0'
+        while token == '0':
+            token = input('Which dataset? ')
+            print(token)
+            if token  not in tokens:
+                print("not in the list")
+                token = '0'
+            else: 
+                inToken = int(token)
+                inToken = inToken - 1
+                datasetID = IDs[inToken]
+            print (datasetID)
+        documentInfo.mdId = datasetID
+        documentInfo = process(documentInfo)    
+        save(documentInfo)
+        new_game = input("Would you like to do another one? Enter 'y' or 'n' ")
+        if new_game[0].lower()=='y':
+            playing=True
+            continue
+        else:
+            print("Thanks for your work!")
+            break    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+#     documentInfo.mdId = input('Enter Document ID: ')
+#     documentInfo = process(documentInfo)    
+#     save(documentInfo)         
+
+
+        
 
 except:
     print("Unexpected error:", sys.exc_info()[0])        
