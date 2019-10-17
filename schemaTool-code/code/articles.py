@@ -224,7 +224,8 @@ def prepareDateCreated(mdId):
     results = cur.fetchall()    
     for row in results: 
         if row.type_value == 'Created':
-            return row.document_date.strftime('%Y-%m-%d')  
+            
+            return row.document_date.strftime('%Y-%m-%d')
 
 def prepareDateAvailable(mdId):
     cur = getCursor()
@@ -233,7 +234,7 @@ def prepareDateAvailable(mdId):
     results = cur.fetchall()    
     for row in results: 
         if row.type_value in ('Available', 'Accepted') :
-            return row.document_date.strftime('%Y-%m-%d')  
+            return row.document_date.strftime('%Y-%m-%d') 
 
 
 def prepareDateModified(mdId):
@@ -243,7 +244,7 @@ def prepareDateModified(mdId):
     results = cur.fetchall()    
     for row in results: 
         if row.type_value == 'Updated' :
-            return row.document_date.strftime('%Y-%m-%d')  
+            return row.document_date.strftime('%Y-%m-%d') 
 
 def prepareRelatedIdentifiers(mdId):
     cur = getCursor()
@@ -319,14 +320,15 @@ def process(documentInfo):
         print(sDOI)
         data = {
             '@context' : 'https://schema.org/',
-            '@type' : mdRow.grt_value,           
+            '@type' : 'Article',           
             'identifier' : mdRow.identifier,
             'name' : mdRow.title,
             'url': mdRow.url,
             'description': mdRow.description_abstract,
             'publisher' :{
                 "type": "organization",
-                "name": mdRow.publisher
+                "name": mdRow.publisher,
+                "logo": "TODO"
                 },
             'datePublished' : mdRow.publication_year,
             'dateCreated' : prepareDateCreated(mdId),
@@ -336,7 +338,7 @@ def process(documentInfo):
             'version' : str(mdRow.version), 
             'keywords' : prepareSubjects(mdId),
             'creator' : prepareCreators(mdId),
-            'contributor' : prepareContributors(mdId),
+            'author' : prepareContributors(mdId),
             'encodingFormat' : mdRow.mime_type,
             'copyrightHolder' : {
                 "type": "organization",
@@ -381,7 +383,7 @@ def getDOCIDs():
     #list 
     DOCIDs = []
     cur = getCursor()
-    cur.execute("""select * from viewMetaDocument where grt_value like 'dataset' """)
+    cur.execute("""select * from viewMetaDocument where grt_value like 'text' """)
     results = cur.fetchall()  
     counter = 0  
     for row in results: 
@@ -421,7 +423,7 @@ try:
     
         token = '0'
         while token == '0':
-            token = input('Which dataset? ')
+            token = input('Which document? ')
             print(token)
             if token  not in tokens:
                 print("not in the list")

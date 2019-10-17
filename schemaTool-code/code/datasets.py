@@ -381,7 +381,7 @@ def getDOCIDs():
     #list 
     DOCIDs = []
     cur = getCursor()
-    cur.execute("""select * from viewMetaDocument where grt_value like 'dataset' """)
+    cur.execute("""select * from viewMetaDocument where grt_value like 'dataset' order by 'URL'  """)
     results = cur.fetchall()  
     counter = 0  
     for row in results: 
