@@ -6,5 +6,6 @@ Created on 13 june 2019
 
 """
 ROOT = "http://local-info.rothamsted.ac.uk/eRA/era2018-new/"
-STAGE = "d:/eRAstage3/"
+STAGE = "d:/eRAstage6/"
 DEFAULT = "metadata/default/"
+STATIONS = ["default", "rothamsted", "broom", "woburn", "saxmundham"] # list of extra directories needed in metadata folders. 

@@ -48,6 +48,18 @@ def getCursor():
     cur = con.cursor()
     return cur
 
+def makeDir(dirpath='default'):
+    status = " created"
+    newDir = settings.STAGE+'metadata/'+dirpath
+    if not os.path.isdir(newDir):
+        os.makedirs(newDir,  exist_ok = True)
+        os.chmod(newDir, stat.S_IRWXO)
+        status = " created"
+    else: 
+        os.chmod(newDir, stat.S_IRWXO)
+        status = " already here"
+    return newDir + status
+
 class Expt:
     """The class that will define an experiment and we can use that to make the folder. The row is the result of a query in the table
     
@@ -90,7 +102,7 @@ def getExperiments():
     """
     cur = getCursor()
 
-    sql = f'Select * from experiment '
+    sql = f'Select * from experiment where "GLTENID" > 0 '
     cur.execute(sql)
     results = cur.fetchall() 
     return results 
@@ -104,9 +116,12 @@ def makeJSON(results):
 
 def makedirectories(results):  
     testString = ""
+    others = settings.STATIONS
     for row in results: 
         ex = Expt(row)        
         testString += ex.mkExptDir() + '\n'
+    for item in others:
+        testString += makeDir(item) +'\n'
     return testString
 
 if __name__ == '__main__':
