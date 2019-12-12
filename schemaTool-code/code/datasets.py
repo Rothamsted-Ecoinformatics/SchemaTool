@@ -212,9 +212,13 @@ def prepareDescriptions(row):
         descriptions.append({'inLanguage' : row.language, 'descriptionType' : 'TableOfContents', 'description' : row.description_toc})
     if not row.description_technical_info is None:
         descriptions.append({'inLanguage' : row.language, 'descriptionType' : 'TechnicalInfo', 'description' : row.description_technical_info})
-    if not row.description_quality is None or not row.description_provenance is None or not row.description_other is None:
-        descriptions.append({'inLanguage' : row.language, 'descriptionType' : 'Other', 'description' : str(row.description_provenance) + " " + str(row.description_quality) + " " + str(row.description_other)})
-    
+    if not row.description_other is None:
+        descriptions.append({'inLanguage' : row.language, 'descriptionType' : 'Other', 'description' : str(row.description_other)})
+    if not row.description_provenance is None :
+        descriptions.append({'inLanguage' : row.language, 'descriptionType' : 'Provenance', 'description' : str(row.description_provenance) })
+    if not row.description_quality is None :
+        descriptions.append({'inLanguage' : row.language, 'descriptionType' : 'Quality', 'description' :  str(row.description_quality) })
+
     return descriptions
 
 def prepareDateCreated(mdId):
@@ -323,7 +327,7 @@ def process(documentInfo):
             'identifier' : mdRow.identifier,
             'name' : mdRow.title,
             'url': mdRow.url,
-            'description': mdRow.description_abstract,
+            'description': prepareDescriptions(mdRow),
             'publisher' :{
                 "type": "organization",
                 "name": mdRow.publisher
