@@ -4,3 +4,4 @@ schemaTool-doxy/Doxyfile
 .project
 schemaTool-code/code/__pycache__/settings.cpython-37.pyc
 schemaTool-code/code/settings.py
+schemaTool-code/code/__pycache__/prep.cpython-37.pyc

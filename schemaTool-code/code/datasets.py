@@ -12,6 +12,7 @@ import pyodbc
 import json
 import configparser
 import settings
+import prep
 
 
 class DocumentInfo:
@@ -302,12 +303,39 @@ def prepareFundingReferences(mdId):
         
     return fundingreferences
 
+def prepareDistribution(mdId):
+    cur = getCursor()
+    distribution = []
+    
+    rows_count = cur.execute("""SELECT ds_id, md_id, unit_short_name, size_value, location, file_name         
+        FROM document_sizes ds left join measurement_unit as mu on ds.unit_id = mu.unit_id
+        where ds.md_id = ?""", mdId)
+
+    try:
+        results = cur.fetchall()
+        for row in results:
+        
+            encodingFormat = row.file_name[:-3]
+            distribution.append(
+                {
+                    "type": "dataDownload",
+                    "name": row.file_name,
+                    "URL": row.location,
+                    "encodingFormat":  encodingFormat,
+                    "fileSize": str(row.size_value) + ' ' + row.unit_short_name
+                }
+                )  
+    except TypeError:
+        distribution = []
+    return distribution
+
+
 def process(documentInfo):
     mdId = documentInfo.mdId
     mdCursor = getDocumentMetadata(mdId)
     mdRow = mdCursor.fetchone()
     data = None
-    print("Document ID is: " + mdId)
+    print("Dataset ID is: " + mdId)
     if mdRow:
         mdUrl = mdRow.url
         documentInfo.url = mdUrl        
@@ -362,7 +390,8 @@ def process(documentInfo):
                     },
                     'name': mdRow.fieldname            
                 },
-            'funder' : prepareFundingReferences(mdId)
+            'funder' : prepareFundingReferences(mdId),
+            'distribution' : prepareDistribution(mdId)
         }
         print(data)
         
@@ -379,6 +408,9 @@ def save(documentInfo):
     fxname.close()
    
     print('json document saved in '+ xname)
+    datasetFolder = str(documentInfo.folder)+"/"+ str(documentInfo.sDOI)
+    dirname =  settings.STAGE+ "metadata/"+datasetFolder
+    prep.makeDir(datasetFolder)
     print('\n done')
     
 def getDOCIDs():

@@ -4,7 +4,7 @@ Created on 9 Aug 2018
 @author: ostlerr
 @author: castells
 
-This code lists the datasets in the database: you choose the one you want to process and it saves the Schema json in the relevant 
+This code lists the documents / articles in the database: you choose the one you want to process and it saves the Schema json in the relevant 
 folder prepared in your staging area. See settings to set the staging area. 
 '''
 import sys
@@ -12,6 +12,17 @@ import pyodbc
 import json
 import configparser
 import settings
+
+def connect():
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    dsn=config['SQL_SERVER']['DSN']
+    uid = config['SQL_SERVER']['UID']
+    pwd = config['SQL_SERVER']['PWD']
+    con = pyodbc.connect('DSN='+dsn+';uid='+uid+';pwd='+pwd)
+    #con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=Z:\website development\datacite\DataCite Metadata database.accdb;')
+    #con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=D:\code\access\DataCite Metadata database.accdb;')
+    return con
 
 
 class DocumentInfo:
@@ -85,16 +96,6 @@ class Person:
         contributor["affiliation"] = self.affiliation
         return contributor
 
-def connect():
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    dsn=config['SQL_SERVER']['DSN']
-    uid = config['SQL_SERVER']['UID']
-    pwd = config['SQL_SERVER']['PWD']
-    con = pyodbc.connect('DSN='+dsn+';uid='+uid+';pwd='+pwd)
-    #con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=Z:\website development\datacite\DataCite Metadata database.accdb;')
-    #con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=D:\code\access\DataCite Metadata database.accdb;')
-    return con
 
 def getCursor():
     con = connect()
